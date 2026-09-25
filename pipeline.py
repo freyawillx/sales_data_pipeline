@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-import sys
+import argparse
 from utils.data_cleaner import clean_sales_data
 from utils.db_loader import load_to_postgres
 
@@ -15,23 +15,27 @@ def read_json(path):
     return pd.DataFrame(data)
 
 def main():
-    if len(sys.argv) < 2:
-        print("❗ Usage: python pipeline.py <data_file> [table_name]")
-        sys.exit(1)
-
-    file_path = sys.argv[1]
-    table_name = sys.argv[2] if len(sys.argv) > 2 else "sales"
+    parser = argparse.ArgumentParser(description='Clean sales data')
+    parser.add_argument('data_file')
+    parser.add_argument('table_name', nargs='?', default='sales')
+    parser.add_argument('--output-csv', help='write cleaned rows to CSV instead of PostgreSQL')
+    args = parser.parse_args()
+    file_path = args.data_file
+    table_name = args.table_name
 
     if file_path.endswith(".csv"):
         df = read_csv(file_path)
     elif file_path.endswith(".json"):
         df = read_json(file_path)
     else:
-        print("❗ Supported formats: .csv, .json")
-        sys.exit(1)
+        parser.error('Supported formats: .csv, .json')
 
     df_clean = clean_sales_data(df)
-    load_to_postgres(df_clean, table_name)
+    if args.output_csv:
+        df_clean.to_csv(args.output_csv, index=False)
+        print(f"Wrote {len(df_clean)} cleaned rows to {args.output_csv}")
+    else:
+        load_to_postgres(df_clean, table_name)
 
 if __name__ == "__main__":
     main()
