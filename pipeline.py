@@ -22,9 +22,9 @@ def main():
     file_path = sys.argv[1]
     table_name = sys.argv[2] if len(sys.argv) > 2 else "sales"
 
-    if file_path.endswith(".csv"):
+    if file_path.lower().endswith(".csv"):
         df = read_csv(file_path)
-    elif file_path.endswith(".json"):
+    elif file_path.lower().endswith(".json"):
         df = read_json(file_path)
     else:
         print("❗ Supported formats: .csv, .json")
