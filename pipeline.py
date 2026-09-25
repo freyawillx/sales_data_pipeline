@@ -31,6 +31,9 @@ def main():
         sys.exit(1)
 
     df_clean = clean_sales_data(df)
+    if df_clean.empty:
+        print('No valid sales rows to load.')
+        return
     load_to_postgres(df_clean, table_name)
 
 if __name__ == "__main__":
