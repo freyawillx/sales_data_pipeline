@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 def clean_sales_data(df: pd.DataFrame) -> pd.DataFrame:
     df.dropna(subset=["date", "product", "quantity", "price"], inplace=True)
@@ -6,4 +7,5 @@ def clean_sales_data(df: pd.DataFrame) -> pd.DataFrame:
     df.dropna(subset=["date"], inplace=True)
     df['quantity'] = df['quantity'].astype(int)
     df['price'] = df['price'].astype(float)
+    df = df.loc[np.isfinite(df['price'])].copy()
     return df
