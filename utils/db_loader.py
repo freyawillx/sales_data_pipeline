@@ -1,6 +1,6 @@
 import pandas as pd
 import psycopg2
-from psycopg2.extras import execute_values
+from psycopg2 import sql
 
 def load_to_postgres(df: pd.DataFrame, table_name="sales"):
     conn = psycopg2.connect(
@@ -12,23 +12,20 @@ def load_to_postgres(df: pd.DataFrame, table_name="sales"):
     )
     cursor = conn.cursor()
 
-    cursor.execute(f"""
-        CREATE TABLE IF NOT EXISTS {table_name} (
+    cursor.execute(sql.SQL("""
+        CREATE TABLE IF NOT EXISTS {} (
             date DATE,
             product TEXT,
             quantity INTEGER,
             price FLOAT
         );
-    """)
+    """).format(sql.Identifier(table_name)))
     conn.commit()
 
-    rows = list(df[['date', 'product', 'quantity', 'price']].itertuples(index=False, name=None))
-    if rows:
-        execute_values(
-            cursor,
-            f"INSERT INTO {table_name} (date, product, quantity, price) VALUES %s;",
-            rows,
-            page_size=1000,
+    for _, row in df.iterrows():
+        cursor.execute(
+            sql.SQL("INSERT INTO {} (date, product, quantity, price) VALUES (%s, %s, %s, %s);").format(sql.Identifier(table_name)),
+            (row["date"], row["product"], row["quantity"], row["price"])
         )
     conn.commit()
     conn.close()
