@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-import sys
+import argparse
 from utils.data_cleaner import clean_sales_data
 from utils.db_loader import load_to_postgres
 
@@ -22,12 +22,12 @@ def read_json_lines(path):
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("❗ Usage: python pipeline.py <data_file> [table_name]")
-        sys.exit(1)
-
-    file_path = sys.argv[1]
-    table_name = sys.argv[2] if len(sys.argv) > 2 else "sales"
+    parser = argparse.ArgumentParser(description='Clean sales data and load it into PostgreSQL')
+    parser.add_argument('data_file', help='CSV or JSON file to import')
+    parser.add_argument('table_name', nargs='?', default='sales', help='destination table (default: sales)')
+    args = parser.parse_args()
+    file_path = args.data_file
+    table_name = args.table_name
 
     if file_path.endswith(".csv"):
         df = read_csv(file_path)
@@ -36,6 +36,7 @@ def main():
     elif file_path.endswith(".jsonl"):
         df = read_json_lines(file_path)
     else:
+        parser.error('Supported formats: .csv, .json')
         print("❗ Supported formats: .csv, .json, .jsonl")
         sys.exit(1)
 
