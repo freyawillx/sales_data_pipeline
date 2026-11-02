@@ -41,7 +41,7 @@ def main():
     invalid = 0
     counts = Counter()
     with args.input.open(encoding="utf-8-sig", newline="") as source:
-        reader = csv.DictReader(source)
+        reader = csv.DictReader(source, strict=True)
         required = {"date", "product", "quantity", "price"}
         if not reader.fieldnames or not required.issubset(reader.fieldnames):
             parser.error("CSV is missing required sales headers")
