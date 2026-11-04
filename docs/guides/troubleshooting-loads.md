@@ -9,7 +9,7 @@ database committed.
 | Usage text | Supply an input path to `pipeline.py` |
 | Unsupported format | Use a lowercase `.csv`, `.json`, or `.jsonl` suffix |
 | File not found | Check the current working directory and resolved path |
-| Missing-column KeyError | Inspect exact header names and JSON fields |
+| Missing required sales columns | Inspect exact header names and JSON fields |
 | JSON array-of-objects error | Use an array root with object members |
 | Integer conversion exception | Check fractional, infinite, and oversized quantities |
 | PostgreSQL authentication failure | Verify role, database, environment, and credential mechanism |
