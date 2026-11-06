@@ -1,0 +1,14 @@
+[
+  {
+    "date": "2023-02-29",
+    "product": "Rejected",
+    "quantity": 2,
+    "price": 3.5
+  },
+  {
+    "date": "2024-02-29",
+    "product": "Kept",
+    "quantity": 2,
+    "price": 3.5
+  }
+]
