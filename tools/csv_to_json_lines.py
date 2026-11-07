@@ -17,12 +17,19 @@ def main():
             parser.error("CSV must contain date, product, quantity, and price headers")
         if len(reader.fieldnames) != len(set(reader.fieldnames)):
             parser.error("CSV contains duplicate headers")
-        with args.output.open("x", encoding="utf-8", newline="") as target:
-            for record in reader:
-                if None in record or any(v is None for v in record.values()):
-                    parser.error("CSV record width does not match the header")
-                target.write(json.dumps(record, ensure_ascii=True) + "\n")
-                count += 1
+        created = False
+        try:
+            with args.output.open("x", encoding="utf-8", newline="") as target:
+                created = True
+                for record in reader:
+                    if None in record or any(v is None for v in record.values()):
+                        parser.error("CSV record width does not match the header")
+                    target.write(json.dumps(record, ensure_ascii=True) + "\n")
+                    count += 1
+        except BaseException:
+            if created:
+                args.output.unlink(missing_ok=True)
+            raise
     print(json.dumps({"records": count}))
 
 if __name__ == "__main__":
