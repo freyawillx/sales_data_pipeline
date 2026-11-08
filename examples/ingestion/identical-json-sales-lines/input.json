@@ -1,0 +1,14 @@
+[
+  {
+    "date": "2024-01-01",
+    "product": "Widget",
+    "quantity": 2,
+    "price": 3.5
+  },
+  {
+    "date": "2024-01-01",
+    "product": "Widget",
+    "quantity": 2,
+    "price": 3.5
+  }
+]
