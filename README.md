@@ -7,14 +7,14 @@ A simple and efficient pipeline to extract, clean, transform, and store sales da
 - Data ingestion from CSV files  
 - Cleaning and preprocessing of raw sales data  
 - Basic transformation logic (e.g., date parsing, value formatting)  
-- Export to structured format (e.g., cleaned CSV or database)
+- Load cleaned sales into PostgreSQL
 
 
 ## 🚀 Getting Started
 
 1. **Clone the repo**
    ```bash
-   git clone https://github.com/yassnemo/sales_data_pipeline.git
+   git clone https://github.com/freyawillx/sales_data_pipeline.git
    cd sales_data_pipeline
    ```
 
@@ -26,7 +26,7 @@ A simple and efficient pipeline to extract, clean, transform, and store sales da
 3. Run the pipeline
 
   ```bash 
-  python main.py
+  python pipeline.py path/to/sales.csv sales
   ```
 
 ## ✅ TODO
@@ -37,3 +37,5 @@ A simple and efficient pipeline to extract, clean, transform, and store sales da
 
 📄 License
 This project is licensed under the MIT License.
+
+See [the local quickstart](docs/guides/local-quickstart.md) for input data, PostgreSQL setup requirements, and rerun precautions.
