@@ -1,5 +1,6 @@
 import pandas as pd
 import psycopg2
+from psycopg2.extras import execute_values
 import os
 
 def load_to_postgres(df: pd.DataFrame, table_name="sales"):
