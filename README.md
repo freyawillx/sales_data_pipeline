@@ -39,3 +39,5 @@ A simple and efficient pipeline to extract, clean, transform, and store sales da
 This project is licensed under the MIT License.
 
 See [the local quickstart](docs/guides/local-quickstart.md) for input data, PostgreSQL setup requirements, and rerun precautions.
+
+Browse the [documentation index](docs/README.md) for all existing guides, tools, and analysis examples.
