@@ -1,6 +1,6 @@
 # a streaming CSV to JSON Lines converter
 
-Streams one CSV record at a time, handles standard quoting, and preserves all field text, including leading zeros. Quantity and price remain JSON strings for later numeric conversion by the cleaner. The converter is not a business-data validator. Existing outputs are refused. If a malformed record appears midway, a partial output can remain; inspect and remove or quarantine it before retrying under a new path. A header-only CSV produces an empty JSONL file, which is not a populated pipeline input.
+Streams one CSV record at a time, handles standard quoting, and preserves all field text, including leading zeros. Quantity and price remain JSON strings for later numeric conversion by the cleaner. The converter is not a business-data validator. Existing outputs are refused. If conversion fails after creating output, the newly created partial file is removed. An output that existed before invocation is never removed or overwritten. A header-only CSV produces an empty JSONL file, which is not a populated pipeline input.
 
 Run from the repository root:
 
