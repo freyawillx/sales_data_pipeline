@@ -1,0 +1,5 @@
+product,sales_lines,median_quantity,p95_quantity
+ B ,1,1.0,1.0
+A,4,1.5,2.0
+B,4,1.0,2.6999999999999993
+C,1,2.0,2.0
