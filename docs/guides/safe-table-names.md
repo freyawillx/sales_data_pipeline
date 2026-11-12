@@ -1,29 +1,21 @@
-# Table names are trusted configuration
+# Destination identifiers and transaction safety
 
-The loader currently interpolates `table_name` into CREATE TABLE and INSERT
-statements using f-strings. A table name is an SQL identifier, not a regular
-bound value. The command-line table argument must therefore come from trusted
-configuration, never directly from a web request, uploaded filename, or other
-untrusted input.
+The loader composes its destination using `psycopg2.sql.Identifier`. Table names
+are quoted as identifiers rather than interpolated as executable SQL. Data values
+continue to be passed through the driver's batch-insert helper.
 
-Until the SQL builder is hardened, use a reviewed simple identifier such as
-`sales` or `sales_archive`. A conservative application-side allowlist can be:
+The argument represents one table identifier. A string such as `public.sales`
+is quoted as a single name containing a dot; it is not a schema/table pair.
+Use `sales` under the intended connection search path. Schema-qualified support
+would need an explicit interface and separate identifier components.
 
-```python
-import re
-name = "sales_archive"
-if re.fullmatch(r"[a-z_][a-z0-9_]*", name) is None:
-    raise ValueError("untrusted destination table name")
-```
+Creating the table and inserting the batch share one transaction. Successful
+loads commit once; exceptions trigger rollback. Cursor and connection resources
+are closed after success or failure. Existing data still remains in place, and
+another successful run still appends duplicate values.
 
-This example is an operational restriction, not a patch already applied by
-the pipeline. It intentionally excludes schema-qualified names, quoted
-identifiers, uppercase names, and punctuation. An allowlist of a few known
-destinations is even easier to audit than accepting arbitrary names.
-
-A proper implementation should compose identifiers using psycopg2's SQL
-composition facilities and define schema/table handling explicitly. Parameter
-placeholders protect data values but cannot simply stand in for identifiers.
-Include regression coverage for malicious-looking and quoted names before
-broadening the accepted interface. Restrict database privileges as a second
-layer; an input validation convention alone is not a permission boundary.
+Keep a dedicated database role and trusted destination configuration. Correct
+quoting does not grant privileges or decide which table a caller should access.
+The regression suite mocks the connection boundary and verifies composition,
+single-commit behavior, rollback, and cleanup. It does not substitute for a
+disposable-database integration test of PostgreSQL permissions and transactions.

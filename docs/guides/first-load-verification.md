@@ -28,8 +28,8 @@ In a previously empty destination, expect one line, two units, and revenue
 approximately 7.0. A larger count may indicate existing data or a rerun.
 Do not compare floating-point totals using display formatting alone.
 
-A failure before insertion can still leave a created table because table
-creation and insertion currently have separate commits. Inspect both schema
-and rows after an exception. If the helper raises `NameError: execute_values`,
+Table creation and insertion share one transaction. A failure triggers rollback,
+but inspect both schema and rows whenever the client cannot establish whether
+a commit completed. If the helper raises `NameError: execute_values`,
 fix its missing import rather than repeatedly retrying the same load.
 Remove the disposable database through your normal local cleanup workflow.
