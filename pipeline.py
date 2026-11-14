@@ -10,7 +10,7 @@ def read_csv(path):
 
 def read_json(path):
     print(f"📥 Reading JSON: {path}")
-    with open(path, "r") as f:
+    with open(path, "r", encoding="utf-8-sig") as f:
         data = json.load(f)
     if not isinstance(data, list) or not all(isinstance(row, dict) for row in data):
         raise ValueError('JSON input must be an array of sales objects')

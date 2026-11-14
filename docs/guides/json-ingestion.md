@@ -19,9 +19,9 @@ rows = [{"date": "2024-01-01", "product": "Caf\u00e9", "quantity": 2, "price": 3
 Path("sample.json").write_text(json.dumps(rows, ensure_ascii=True), encoding="ascii")
 ```
 
-Escaped Unicode is useful because the current reader opens the file using
-the platform's default text encoding. Literal non-ASCII files need a matching
-default encoding or a deliberate reader change. The serialized product above
+The reader explicitly uses UTF-8 with optional BOM handling. Both escaped
+Unicode and literal UTF-8 product names are supported independently of the
+platform's default text encoding. The serialized product above
 still becomes `Café` in memory.
 
 Validate shape with `read_json("sample.json")`, then apply
