@@ -1,6 +1,10 @@
 import pandas as pd
 
 def clean_sales_data(df: pd.DataFrame) -> pd.DataFrame:
+    required = ['date', 'product', 'quantity', 'price']
+    missing = [column for column in required if column not in df.columns]
+    if missing:
+        raise ValueError('Missing required sales columns: ' + ', '.join(missing))
     df = df.copy()
     df.dropna(subset=["date", "product", "quantity", "price"], inplace=True)
     df = df.loc[df['product'].astype(str).str.strip().ne('')].copy()
